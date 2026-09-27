@@ -161,7 +161,7 @@ function StepProvider({
   downloadProgress: { downloadedBytes: number; totalBytes: number; isDownloading: boolean; statusText: string };
   triggerLocalModelDownload: () => void;
 }) {
-  const needsKey = provider !== "GEMMA_LOCAL" && provider !== "GEMMA_LOCAL";
+  const needsKey = provider !== "GEMMA_LOCAL" && provider !== "GEMINI_API";
   const [show, setShow] = React.useState(false);
   const options: ModelProvider[] = ["GEMINI_API", "OPENAI_API", "ANTHROPIC_API"];
   return (
@@ -169,9 +169,14 @@ function StepProvider({
       <SectionHeader title="Choose your AI" subtitle="Run on-device with Gemma, or connect a cloud provider" />
       <div className="mt-4 space-y-2.5">
         {options.map((p) => (
-          <ProviderCard key={p} selected={provider === p} onClick={() => setProvider(p)} label={PROVIDER_LABELS[p]} note={p === "GEMINI_API" ? "Works out of the box with the bundled key." : "Bring your own API key."} />
+          <ProviderCard key={p} selected={provider === p} onClick={() => setProvider(p)} label={PROVIDER_LABELS[p]} note={p === "GEMINI_API" ? "Uses the server's GEMINI_API_KEY environment variable." : "Bring your own API key."} />
         ))}
       </div>
+      {provider === "GEMINI_API" && (
+        <p className="mt-3 text-xs" style={{ color: "var(--earth-secondary-text)" }}>
+          Configure GEMINI_API_KEY in your Vercel project settings before using Gemini chat.
+        </p>
+      )}
       {needsKey && (
         <div className="mt-4">
           <label className="text-sm font-medium" style={{ color: "var(--earth-deep-espresso)" }}>

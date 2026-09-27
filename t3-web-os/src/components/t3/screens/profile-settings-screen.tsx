@@ -37,7 +37,6 @@ export function ProfileSettingsScreen() {
   const [cloudSync, setCloudSync] = React.useState(config.cloudSyncEnabled);
   const [showKeys, setShowKeys] = React.useState(false);
   const [keys, setKeys] = React.useState({
-    gemini: config.apiKey,
     openai: config.openAiApiKey,
     anthropic: config.anthropicApiKey,
   });
@@ -195,13 +194,14 @@ export function ProfileSettingsScreen() {
           </button>
         </div>
         <div className="space-y-2.5">
-          <KeyRow label="Google Gemini" value={keys.gemini} show={showKeys} onChange={(v) => setKeys((k) => ({ ...k, gemini: v }))} />
+          <p className="text-xs" style={{ color: "var(--earth-secondary-text)" }}>
+            Gemini chat uses GEMINI_API_KEY from the server environment. Configure it in Vercel project settings.
+          </p>
           <KeyRow label="OpenAI" value={keys.openai} show={showKeys} onChange={(v) => setKeys((k) => ({ ...k, openai: v }))} />
           <KeyRow label="Anthropic" value={keys.anthropic} show={showKeys} onChange={(v) => setKeys((k) => ({ ...k, anthropic: v }))} />
         </div>
         <button
           onClick={() => {
-            useT3Store.getState().saveModelConfig("GEMINI_API", keys.gemini);
             useT3Store.setState((s) => ({ config: { ...s.config, openAiApiKey: keys.openai, anthropicApiKey: keys.anthropic } }));
             setKeysSaved(true);
             setTimeout(() => setKeysSaved(false), 1800);

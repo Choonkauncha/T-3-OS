@@ -24,6 +24,9 @@ T³ is a Next.js 16 recreation and expansion of an AI operating-system interface
    cp .env.example .env
    ```
 
+   Set `GEMINI_API_KEY` in `.env` for local chat. For deployments, add it as a
+   server-side environment variable in your Vercel project's Settings > Environment Variables.
+
 3. Generate and initialize the Prisma database:
 
    ```bash

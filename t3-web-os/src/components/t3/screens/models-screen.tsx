@@ -89,18 +89,27 @@ export function ModelsScreen() {
             <div className="flex-1 min-w-0">
               <p className="font-semibold" style={{ color: "var(--earth-deep-espresso)" }}>{PROVIDER_LABELS[selected]}</p>
               <div className="mt-1">
-                <StatusPill text={keyFor(selected) ? "Configured" : "Needs key"} color={keyFor(selected) ? "var(--earth-sage-green)" : "var(--cyber-warning-yellow)"} />
+                <StatusPill
+                  text={selected === "GEMINI_API" ? "Server key" : keyFor(selected) ? "Configured" : "Needs key"}
+                  color={selected === "GEMINI_API" ? "var(--earth-secondary-text)" : keyFor(selected) ? "var(--earth-sage-green)" : "var(--cyber-warning-yellow)"}
+                />
               </div>
             </div>
           </div>
 
-          <KeyField
-            label="API key"
-            value={keyFor(selected)}
-            show={selected === "GEMINI_API" ? show.gemini : selected === "OPENAI_API" ? show.openai : show.anthropic}
-            onToggleShow={() => setShow((s) => ({ ...s, [selected === "GEMINI_API" ? "gemini" : selected === "OPENAI_API" ? "openai" : "anthropic"]: !s[selected === "GEMINI_API" ? "gemini" : selected === "OPENAI_API" ? "openai" : "anthropic"] }))}
-            onChange={(v) => setKeys((k) => ({ ...k, [selected === "GEMINI_API" ? "gemini" : selected === "OPENAI_API" ? "openai" : "anthropic"]: v }))}
-          />
+          {selected === "GEMINI_API" ? (
+            <p className="text-xs" style={{ color: "var(--earth-secondary-text)" }}>
+              Chat uses GEMINI_API_KEY from the server environment. Set it in your Vercel project settings or local .env file.
+            </p>
+          ) : (
+            <KeyField
+              label="API key"
+              value={keyFor(selected)}
+              show={selected === "OPENAI_API" ? show.openai : show.anthropic}
+              onToggleShow={() => setShow((s) => ({ ...s, [selected === "OPENAI_API" ? "openai" : "anthropic"]: !s[selected === "OPENAI_API" ? "openai" : "anthropic"] }))}
+              onChange={(v) => setKeys((k) => ({ ...k, [selected === "OPENAI_API" ? "openai" : "anthropic"]: v }))}
+            />
+          )}
 
           {selected === "CUSTOM_REST" && (
             <div className="mt-3">
